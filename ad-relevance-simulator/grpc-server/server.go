@@ -24,8 +24,9 @@ import (
 	"sync"
 	"time"
 
-	_ "github.com/lib/pq"
 	pb "adranker/proto"
+
+	_ "github.com/lib/pq"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
@@ -89,7 +90,7 @@ type AdRankingServer struct {
 func NewAdRankingServer(db *sql.DB) *AdRankingServer {
 	return &AdRankingServer{
 		db:    db,
-		cache: NewAdCache(5 * time.Second), // 5s TTL — the resume claim
+		cache: NewAdCache(5 * time.Second), // 5s TTL — trades score freshness for latency
 	}
 }
 

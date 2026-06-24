@@ -141,7 +141,7 @@ func main() {
 	fmt.Printf("  P50 (median):    %.2f ms\n", percentile(50))
 	fmt.Printf("  P90:             %.2f ms\n", percentile(90))
 	fmt.Printf("  P95:             %.2f ms\n", percentile(95))
-	fmt.Printf("  P99:             %.2f ms  ← the resume claim\n", percentile(99))
+	fmt.Printf("  P99:             %.2f ms\n", percentile(99))
 	fmt.Printf("  P99.9:           %.2f ms\n", percentile(99.9))
 	fmt.Printf("  Max:             %.2f ms\n", percentile(100))
 	fmt.Printf("  Average:         %.2f ms\n", avgMs)

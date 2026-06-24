@@ -5,7 +5,7 @@
 //     1. grpc-gateway (proto annotations → REST proxy) — production choice
 //     2. grpc-web + Envoy proxy — another production pattern
 //     3. Simple JSON HTTP handler — our choice for the demo (zero extra deps)
-//   For an interview, mentioning all three shows you know the ecosystem.
+//   For production, grpc-gateway or Envoy would be the right choice.
 
 package main
 
