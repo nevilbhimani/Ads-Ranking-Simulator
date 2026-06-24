@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+package ads;
+
+option go_package = "adranker/proto";
+
+// ─── Request ────────────────────────────────────────────────────────────────
+// top_n: how many ranked ads to return (e.g., top 10 for an auction slot)
+// campaign_id: optional filter — 0 means "all campaigns"
+message RankAdsRequest {
+  int32 top_n       = 1;
+  int32 campaign_id = 2;
+}
+
+// ─── Response ───────────────────────────────────────────────────────────────
+message RankedAd {
+  int32  ad_id            = 1;
+  double predicted_ctr    = 2;  // logistic regression output
+  double weighted_score   = 3;  // CTR * bid_price — the auction ranking key
+  int32  rank_position    = 4;
+  int32  impression_count = 5;
+  bool   from_cache       = 6;  // true if served from 5s TTL cache
+}
+
+message RankAdsResponse {
+  repeated RankedAd ads         = 1;
+  int64             latency_us  = 2;  // server-side latency in microseconds
+  string            cache_status = 3; // "HIT" or "MISS"
+}
+
+// ─── Service ────────────────────────────────────────────────────────────────
+service AdRankingService {
+  // GetRankedAds returns top-N ranked ads for an auction slot.
+  // This is the hot path — served from cache when possible.
+  rpc GetRankedAds(RankAdsRequest) returns (RankAdsResponse);
+
+  // GetAdStats returns per-ad CTR trends for the dashboard.
+  rpc GetAdStats(StatsRequest) returns (StatsResponse);
+}
+
+// ─── Stats (for React dashboard) ────────────────────────────────────────────
+message StatsRequest {
+  int32 limit = 1;  // how many ads to include
+}
+
+message AdStat {
+  int32  ad_id            = 1;
+  double predicted_ctr    = 2;
+  double weighted_score   = 3;
+  int32  rank_position    = 4;
+  int32  impression_count = 5;
+}
+
+message StatsResponse {
+  repeated AdStat stats = 1;
+}
